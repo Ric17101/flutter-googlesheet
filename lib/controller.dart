@@ -1,3 +1,4 @@
+import 'package:googlesheets_feedback_flutter/credentials/credentials.dart';
 import 'package:googlesheets_feedback_flutter/model/feedback_form.dart';
 import 'package:dio/dio.dart';
 import 'package:gsheets/gsheets.dart';
@@ -27,9 +28,9 @@ class FormController {
   // TEST
   void getSheet() async {
     // init GSheets
-    final gsheets = GSheets(_credentials);
+    final gsheets = GSheets(credentials);
     // fetch spreadsheet by its id
-    final ss = await gsheets.spreadsheet(_spreadsheetId);
+    final ss = await gsheets.spreadsheet(spreadsheetId);
 
     var sheet = ss.worksheetByTitle('Sheet1');
     print(await sheet?.values.value(column: 1, row: 2));
