@@ -39,7 +39,33 @@ class SheetController {
     }));
   }
 
-  void getFeedbackSheetBy({String title = 'Feedback'}) async {
+  // TODO: rename as generic
+  Future<List<FeedbackForm>> getFeedbackSheetBy({String title = 'Feedback'}) async {
+    // init GSheets
+    final gsheets = GSheets(credentials);
+    // fetch spreadsheet by its id
+    final ss = await gsheets.spreadsheet(spreadsheetId);
+
+    var sheet = ss.worksheetByTitle(title);
+
+    final rows = await sheet?.cells.allRows();
+
+    return rows
+            ?.skip(1)
+            .map(
+              (e) => FeedbackForm(
+                e[0].value,
+                e[1].value,
+                e[2].value,
+                e[3].value,
+                e[4].value,
+              ),
+            )
+            .toList() ??
+        List.empty();
+  }
+
+  void getFeedbackSheetRowBy({String title = 'Feedback'}) async {
     // init GSheets
     final gsheets = GSheets(credentials);
     // fetch spreadsheet by its id

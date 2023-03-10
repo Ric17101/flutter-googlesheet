@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:googlesheets_feedback_flutter/controller.dart';
 import 'package:googlesheets_feedback_flutter/model/work_sheet_item.dart';
-import 'package:gsheets/gsheets.dart';
+import 'package:googlesheets_feedback_flutter/screen/row_list_page.dart';
 
-class SheetListScreen extends StatelessWidget {
-  const SheetListScreen({super.key});
+class SheetListPage extends StatelessWidget {
+  const SheetListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,21 +13,21 @@ class SheetListScreen extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SheetListPage(title: "Sheets"),
+      home: const SheetList(title: "Sheets"),
     );
   }
 }
 
-class SheetListPage extends StatefulWidget {
-  const SheetListPage({super.key, required this.title});
+class SheetList extends StatefulWidget {
+  const SheetList({super.key, required this.title});
 
   final String title;
 
   @override
-  SheetListPageState createState() => SheetListPageState();
+  SheetListState createState() => SheetListState();
 }
 
-class SheetListPageState extends State<SheetListPage> {
+class SheetListState extends State<SheetList> {
   List<WorkSheetItem> workSheets = [];
 
   // Method to Submit Feedback and save it in Google Sheets
@@ -35,8 +35,6 @@ class SheetListPageState extends State<SheetListPage> {
   @override
   void initState() {
     super.initState();
-
-    SheetController().getFeedbackSheetBy();
     SheetController().getSheets().then((workSheets) {
       setState(() {
         this.workSheets = workSheets;
@@ -47,13 +45,19 @@ class SheetListPageState extends State<SheetListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       body: ListView.builder(
         itemCount: workSheets.length,
         itemBuilder: (context, index) {
           return ListTile(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => RowListPage(title: workSheets[index].worksheet.title),
+                ),
+              );
+            },
             title: Row(
               children: <Widget>[
                 const Icon(Icons.person),

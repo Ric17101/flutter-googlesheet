@@ -1,11 +1,13 @@
 /// FeedbackForm is a data class which stores data fields of Feedback.
 class FeedbackForm {
+  String id;
   String name;
   String email;
   String mobileNumber;
   String feedback;
 
   FeedbackForm(
+    this.id,
     this.name,
     this.email,
     this.mobileNumber,
@@ -14,6 +16,7 @@ class FeedbackForm {
 
   factory FeedbackForm.fromJson(dynamic json) {
     return FeedbackForm(
+      "${json['id']}",
       "${json['name']}",
       "${json['email']}",
       "${json['mobileNumber']}",
