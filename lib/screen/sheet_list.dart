@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:googlesheets_feedback_flutter/controller.dart';
+import 'package:googlesheets_feedback_flutter/model/work_sheet_item.dart';
 import 'package:gsheets/gsheets.dart';
 
 class SheetListScreen extends StatelessWidget {
@@ -27,7 +28,7 @@ class SheetListPage extends StatefulWidget {
 }
 
 class SheetListPageState extends State<SheetListPage> {
-  List<Worksheet> feedbackItems = [];
+  List<WorkSheetItem> workSheets = [];
 
   // Method to Submit Feedback and save it in Google Sheets
 
@@ -35,9 +36,10 @@ class SheetListPageState extends State<SheetListPage> {
   void initState() {
     super.initState();
 
-    SheetController().getSheets().then((feedbackItems) {
+    SheetController().getFeedbackSheetBy();
+    SheetController().getSheets().then((workSheets) {
       setState(() {
-        this.feedbackItems = feedbackItems;
+        this.workSheets = workSheets;
       });
     });
   }
@@ -49,14 +51,14 @@ class SheetListPageState extends State<SheetListPage> {
         title: Text(widget.title),
       ),
       body: ListView.builder(
-        itemCount: feedbackItems.length,
+        itemCount: workSheets.length,
         itemBuilder: (context, index) {
           return ListTile(
             title: Row(
               children: <Widget>[
                 const Icon(Icons.person),
                 Expanded(
-                  child: Text("${feedbackItems[index].title} (${feedbackItems[index].id})"),
+                  child: Text("${workSheets[index].worksheet.title} (${workSheets[index].count})"),
                 )
               ],
             ),
@@ -64,7 +66,7 @@ class SheetListPageState extends State<SheetListPage> {
               children: <Widget>[
                 const Icon(Icons.message),
                 Expanded(
-                  child: Text(feedbackItems[index].spreadsheetId),
+                  child: Text('${workSheets[index].worksheet.id}'),
                 )
               ],
             ),

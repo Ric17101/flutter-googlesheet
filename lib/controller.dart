@@ -1,6 +1,7 @@
 import 'package:googlesheets_feedback_flutter/credentials/credentials.dart';
 import 'package:googlesheets_feedback_flutter/model/feedback_form.dart';
 import 'package:dio/dio.dart';
+import 'package:googlesheets_feedback_flutter/model/work_sheet_item.dart';
 import 'package:gsheets/gsheets.dart';
 
 // your google auth credentials
@@ -25,13 +26,28 @@ const _spreadsheetId = '';
 /// SheetController is a class which does work of saving FeedbackForm in Google Sheets using
 /// HTTP GET request on Google App Script Web URL and parses response and sends result callback.
 class SheetController {
-  Future<List<Worksheet>> getSheets() async {
+  Future<List<WorkSheetItem>> getSheets() async {
     // init GSheets
     final gsheets = GSheets(credentials);
     // fetch spreadsheet by its id
     final ss = await gsheets.spreadsheet(spreadsheetId);
 
-    return ss.sheets;
+    return await Future.wait(ss.sheets.map((e) async {
+      // can be counter to get the total number of rows occupied
+      final rows = await e.cells.allRows();
+      return WorkSheetItem(worksheet: e, count: rows.length - 1);
+    }));
+  }
+
+  void getFeedbackSheetBy({String title = 'Feedback'}) async {
+    // init GSheets
+    final gsheets = GSheets(credentials);
+    // fetch spreadsheet by its id
+    final ss = await gsheets.spreadsheet(spreadsheetId);
+
+    var sheet = ss.worksheetByTitle(title);
+    final rows = await sheet?.cells.allRows();
+    print('${rows?.length ?? 0}');
   }
 
   // TEST
@@ -62,7 +78,7 @@ class SheetController {
     // Update by ROW based on key
 
     await sheet?.values.insertRowByKey('name2', secondColumnNum);
-    await sheet?.values.insertRowByKey('1001', secondColumn);
+    await sheet?.values.insertRowByKey('1002', secondColumn);
 
     // Insert new row
     // await sheet?.values.appendRow(secondColumn);
