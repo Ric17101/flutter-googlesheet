@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:googlesheets_feedback_flutter/controller.dart';
 import 'package:googlesheets_feedback_flutter/model/feedback_form.dart';
+import 'package:googlesheets_feedback_flutter/screen/sheet_list.dart';
 
 void main() => runApp(const MyApp());
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter NoteJam'),
+      home: const SheetListPage(title: 'Flutter NoteJam'),
     );
   }
 }
@@ -48,7 +49,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   // Method to Submit Feedback and save it in Google Sheets
   void _submitForm() {
-    FormController formController = FormController();
+    SheetController formController = SheetController();
 
     _showSnackbar("Submitting Feedback");
 
@@ -68,7 +69,7 @@ class MyHomePageState extends State<MyHomePage> {
         feedbackController.text,
       );
 
-      FormController formController = FormController();
+      SheetController formController = SheetController();
 
       _showSnackbar("Submitting Feedback");
 

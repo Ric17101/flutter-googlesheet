@@ -22,9 +22,18 @@ const _credentials = r'''
 // your spreadsheet id
 const _spreadsheetId = '';
 
-/// FormController is a class which does work of saving FeedbackForm in Google Sheets using
+/// SheetController is a class which does work of saving FeedbackForm in Google Sheets using
 /// HTTP GET request on Google App Script Web URL and parses response and sends result callback.
-class FormController {
+class SheetController {
+  Future<List<Worksheet>> getSheets() async {
+    // init GSheets
+    final gsheets = GSheets(credentials);
+    // fetch spreadsheet by its id
+    final ss = await gsheets.spreadsheet(spreadsheetId);
+
+    return ss.sheets;
+  }
+
   // TEST
   void getSheet() async {
     // init GSheets
