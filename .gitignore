@@ -45,3 +45,4 @@ app.*.map.json
 
 # Flutter GSHeet credentials
 /lib/credentials
+/lib/credentials.dart

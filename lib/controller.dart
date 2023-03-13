@@ -1,4 +1,4 @@
-import 'package:googlesheets_feedback_flutter/credentials/credentials.dart';
+import 'package:googlesheets_feedback_flutter/credentials.dart';
 import 'package:googlesheets_feedback_flutter/model/feedback_form.dart';
 import 'package:dio/dio.dart';
 import 'package:googlesheets_feedback_flutter/model/work_sheet_item.dart';
@@ -25,6 +25,7 @@ const _spreadsheetId = '';
 
 /// SheetController is a class which does work of saving FeedbackForm in Google Sheets using
 /// HTTP GET request on Google App Script Web URL and parses response and sends result callback.
+@Deprecated("Should use AppScript to do API requests instead")
 class SheetController {
   Future<List<WorkSheetItem>> getSheets() async {
     // init GSheets
