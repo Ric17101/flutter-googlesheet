@@ -1,4 +1,4 @@
-package org.flutter.notejam.notejam
+package org.flutter.minutesjam
 
 import io.flutter.embedding.android.FlutterActivity
 

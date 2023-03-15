@@ -1,6 +1,6 @@
 {
-    "name": "notejam",
-    "short_name": "notejam",
+    "name": "minutesjam",
+    "short_name": "minutesjam",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

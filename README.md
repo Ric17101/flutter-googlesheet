@@ -1,6 +1,6 @@
-# notejam
+# minutesjam
 
-NoteJam Flutter Project using Google Sheets.
+MinutesJam Flutter Project using Google Sheets.
 
 ## Getting Started
 

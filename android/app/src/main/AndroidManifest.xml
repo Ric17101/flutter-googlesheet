@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.flutter.notejam.notejam">
+    package="org.flutter.minutesjam">
    <application
-        android:label="notejam"
+        android:label="MinutesJam"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
