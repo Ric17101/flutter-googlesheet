@@ -1,6 +1,5 @@
 import 'package:googlesheets_feedback_flutter/credentials.dart';
 import 'package:googlesheets_feedback_flutter/model/feedback_form.dart';
-import 'package:dio/dio.dart';
 import 'package:googlesheets_feedback_flutter/model/work_sheet_item.dart';
 import 'package:gsheets/gsheets.dart';
 
@@ -22,6 +21,7 @@ const _credentials = r'''
 
 // your spreadsheet id
 const _spreadsheetId = '';
+const _worksheetFeedbackId = 'Feedback';
 
 /// SheetController is a class which does work of saving FeedbackForm in Google Sheets using
 /// HTTP GET request on Google App Script Web URL and parses response and sends result callback.
@@ -40,8 +40,7 @@ class SheetController {
     }));
   }
 
-  // TODO: rename as generic
-  Future<List<FeedbackForm>> getFeedbackSheetBy({String title = 'Feedback'}) async {
+  Future<List<FeedbackForm>> getFeedbackSheetBy({String title = _worksheetFeedbackId}) async {
     // init GSheets
     final gsheets = GSheets(credentials);
     // fetch spreadsheet by its id
@@ -66,7 +65,7 @@ class SheetController {
         List.empty();
   }
 
-  void getFeedbackSheetRowBy({String title = 'Feedback'}) async {
+  void getFeedbackSheetRowBy({String title = _worksheetFeedbackId}) async {
     // init GSheets
     final gsheets = GSheets(credentials);
     // fetch spreadsheet by its id
@@ -77,7 +76,25 @@ class SheetController {
     print('${rows?.length ?? 0}');
   }
 
-  // TEST
+  // TODO: add submission for new and old entry
+  void submitFeedbackForm({required FeedbackForm feedbackForm, required Function(String) onResult}) async {
+    // init GSheets
+    final gsheets = GSheets(credentials);
+    // fetch spreadsheet by its id
+    final ss = await gsheets.spreadsheet(spreadsheetId);
+
+    var sheet = ss.worksheetByTitle(_worksheetFeedbackId);
+    final newFeedback = [
+      feedbackForm.id,
+      feedbackForm.name,
+      feedbackForm.email,
+      feedbackForm.mobileNumber,
+      feedbackForm.feedback,
+    ];
+    await sheet?.values.appendRow(newFeedback);
+  }
+
+  // TEST only
   void getSheet() async {
     // init GSheets
     final gsheets = GSheets(credentials);
@@ -110,33 +127,5 @@ class SheetController {
     // Insert new row
     // await sheet?.values.appendRow(secondColumn);
     // await sheet?.values.appendRow(secondColumnNum);
-  }
-
-  /// Async function which saves feedback, parses [feedbackForm] parameters
-  /// and sends HTTP GET request on [URL]. On successful response, [callback] is called.
-  void submitForm(FeedbackForm feedbackForm, void Function(String) callback) async {
-    try {
-      final dio = Dio()..options.baseUrl = 'URL';
-
-      final baseUri = Uri.parse('URL');
-      final uri = baseUri.replace(queryParameters: feedbackForm.toJson(), path: '/${baseUri.path}');
-
-      await dio.getUri(uri).then((response) async {
-        print('Response: $response');
-        print('Responses: ${response.statusCode}');
-        print('Responses: ${response.data}');
-        if (response.statusCode != 200) {
-          // if (response.statusCode == 302) {
-          var url = response.headers['location'] ?? '';
-          // await http.get(Uri.parse(url)).then((response) {
-          //   callback(convert.jsonDecode(response.body)['status']);
-          // });
-        } else {
-          callback(response.statusCode.toString());
-        }
-      });
-    } catch (e) {
-      print(e);
-    }
   }
 }

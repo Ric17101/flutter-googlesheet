@@ -29,47 +29,47 @@ class FeedbackPageState extends State<FeedbackPage> {
   TextEditingController mobileNoController = TextEditingController();
   TextEditingController feedbackController = TextEditingController();
 
+  // void _submitForm() {
+  //   SheetController formController = SheetController();
+  //
+  //   _showSnackbar("Submitting Feedback");
+  //
+  //   // Submit 'feedbackForm' and save it in Google Sheets.
+  //   formController.getSheet();
+  // }
+
   // Method to Submit Feedback and save it in Google Sheets
   void _submitForm() {
+    if (_formKey.currentState?.validate() != true) {
+      _showSnackbar("Error Occurred!");
+      return;
+    }
+    // If the form is valid, proceed.
+    FeedbackForm feedbackForm = FeedbackForm(
+      "1",
+      nameController.text,
+      emailController.text,
+      mobileNoController.text,
+      feedbackController.text,
+    );
+
     SheetController formController = SheetController();
 
     _showSnackbar("Submitting Feedback");
 
-    // Submit 'feedbackForm' and save it in Google Sheets.
-    formController.getSheet();
-  }
-
-  // TODO: submit form with new or old form data
-  void _submitForm2() {
-    // Validate returns true if the form is valid, or false
-    // otherwise.
-    if (_formKey.currentState?.validate() == true) {
-      // If the form is valid, proceed.
-      // FeedbackForm feedbackForm = FeedbackForm(
-      //   nameController.text,
-      //   emailController.text,
-      //   mobileNoController.text,
-      //   feedbackController.text,
-      // );
-
-      SheetController formController = SheetController();
-
-      _showSnackbar("Submitting Feedback");
-
-      // Submit 'feedbackForm' and save it in Google Sheets.
-      formController.getSheet();
-
-      // formController.submitForm(feedbackForm, (String response) {
-      //   print("Response: $response");
-      //   if (response == STATUS_SUCCESS) {
-      //     // Feedback is saved succesfully in Google Sheets.
-      //     _showSnackbar("Feedback Submitted");
-      //   } else {
-      //     // Error Occurred while saving data in Google Sheets.
-      //     _showSnackbar("Error Occurred!");
-      //   }
-      // });
-    }
+    formController.submitFeedbackForm(
+      feedbackForm: feedbackForm,
+      onResult: (String response) {
+        print("Response: $response");
+        // if (response == STATUS_SUCCESS) {
+        //   // Feedback is saved succesfully in Google Sheets.
+        //   _showSnackbar("Feedback Submitted");
+        // } else {
+        //   // Error Occurred while saving data in Google Sheets.
+        //   _showSnackbar("Error Occurred!");
+        // }
+      },
+    );
   }
 
   // Method to show snackbar with 'message'.
