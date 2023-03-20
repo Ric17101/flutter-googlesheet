@@ -3,27 +3,18 @@ import 'package:googlesheets_feedback_flutter/controller.dart';
 import 'package:googlesheets_feedback_flutter/model/feedback_form.dart';
 
 class FeedbackPage extends StatefulWidget {
-  const FeedbackPage({
-    required this.form,
-    super.key,
-  });
+  const FeedbackPage({this.form, super.key});
 
-  final FeedbackForm form;
+  final FeedbackForm? form;
 
   @override
   FeedbackPageState createState() => FeedbackPageState();
 }
 
 class FeedbackPageState extends State<FeedbackPage> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a `GlobalKey<FormState>`,
-  // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  // TextField Controllers
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileNoController = TextEditingController();
@@ -46,7 +37,7 @@ class FeedbackPageState extends State<FeedbackPage> {
     }
     // If the form is valid, proceed.
     FeedbackForm feedbackForm = FeedbackForm(
-      "1",
+      "1", // TODO: should increment based on the last ID column
       nameController.text,
       emailController.text,
       mobileNoController.text,
@@ -80,10 +71,12 @@ class FeedbackPageState extends State<FeedbackPage> {
 
   @override
   void initState() {
-    nameController.text = widget.form.name;
-    emailController.text = widget.form.email;
-    mobileNoController.text = widget.form.mobileNumber;
-    feedbackController.text = widget.form.feedback;
+    if (widget.form == null) return;
+
+    nameController.text = widget.form?.name ?? '';
+    emailController.text = widget.form?.email ?? '';
+    mobileNoController.text = widget.form?.mobileNumber ?? '';
+    feedbackController.text = widget.form?.feedback ?? '';
 
     super.initState();
   }
@@ -93,7 +86,7 @@ class FeedbackPageState extends State<FeedbackPage> {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text(widget.form.name)),
+      appBar: AppBar(title: Text(widget.form?.name ?? '')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

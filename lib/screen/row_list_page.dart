@@ -15,6 +15,13 @@ class RowListPage extends StatefulWidget {
 class RowListState extends State<RowListPage> {
   List<FeedbackForm> feedbackForms = [];
 
+  void _navigateFeedbackPage(FeedbackForm? form) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (BuildContext context) => FeedbackPage(form: form)),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -28,22 +35,26 @@ class RowListState extends State<RowListPage> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: add button
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _navigateFeedbackPage(null),
+        tooltip: 'Capture Picture',
+        elevation: 0.0,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 29.0,
+        ),
       ),
       body: ListView.builder(
         itemCount: feedbackForms.length,
         itemBuilder: (context, index) {
           return ListTile(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => FeedbackPage(form: feedbackForms[index]),
-                ),
-              );
-            },
+            onTap: () => _navigateFeedbackPage(feedbackForms[index]),
             title: Row(
               children: <Widget>[
                 const Icon(Icons.person),
