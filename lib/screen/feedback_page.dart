@@ -86,7 +86,7 @@ class FeedbackPageState extends State<FeedbackPage> {
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text(widget.form?.name ?? '')),
+      appBar: AppBar(title: Text(widget.form?.name ?? 'Add new feedback')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

@@ -37,12 +37,10 @@ class RowListState extends State<RowListPage> {
   Widget build(BuildContext context) {
     // TODO: add button
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(title: Text(widget.title)),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _navigateFeedbackPage(null),
-        tooltip: 'Capture Picture',
+        tooltip: 'Add new feedback',
         elevation: 0.0,
         child: const Icon(
           Icons.add,
